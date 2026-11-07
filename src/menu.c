@@ -109,9 +109,10 @@ static const struct WindowTemplate sYesNo_WindowTemplates =
 static const u16 sHofPC_TopBar_Pal[] = INCGFX_U16("graphics/interface/hof_pc_topbar.pal", ".gbapal");
 static const u8 sTextColors[] = { TEXT_DYNAMIC_COLOR_6, TEXT_COLOR_WHITE, TEXT_COLOR_DARK_GRAY };
 
-// Table of move info icon offsets in graphics/interface/menu_info.png
+// Table of move info icon offsets in graphics/interface/menu_info.png [128, 128]
 static const struct MenuInfoIcon sMenuInfoIcons[] =
 {   // { width, height, offset }
+	// image [x, y] = [(offset mod 16) * 8, floor(offset / 2) * 8]
     { 12, 12, 0x00 },  // Unused
     [TYPE_NORMAL + 1]   = { 32, 12, 0x20 },
     [TYPE_FIGHTING + 1] = { 32, 12, 0x64 },
@@ -131,6 +132,7 @@ static const struct MenuInfoIcon sMenuInfoIcons[] =
     [TYPE_ICE + 1]      = { 32, 12, 0x4C },
     [TYPE_DRAGON + 1]   = { 32, 12, 0xA0 },
     [TYPE_DARK + 1]     = { 32, 12, 0x8C },
+	[TYPE_FAIRY + 1]    = { 32, 12, 0x04 },
     [MENU_INFO_ICON_TYPE]      = { 42, 12, 0xA8 },
     [MENU_INFO_ICON_POWER]     = { 42, 12, 0xC0 },
     [MENU_INFO_ICON_ACCURACY]  = { 42, 12, 0xC8 },
