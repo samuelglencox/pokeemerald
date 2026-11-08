@@ -232,6 +232,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectCalmMind               @ EFFECT_CALM_MIND
 	.4byte BattleScript_EffectDragonDance            @ EFFECT_DRAGON_DANCE
 	.4byte BattleScript_EffectCamouflage             @ EFFECT_CAMOUFLAGE
+	.4byte BattleScript_EffectVoltTackle             @ EFFECT_VOLT_TACKLE
 
 BattleScript_EffectHit::
 	jumpifnotmove MOVE_SURF, BattleScript_HitFromAtkCanceler
@@ -596,8 +597,7 @@ BattleScript_EffectRoar::
 	ppreduce
 	jumpifability BS_TARGET, ABILITY_SUCTION_CUPS, BattleScript_AbilityPreventsPhasingOut
 	jumpifstatus3 BS_TARGET, STATUS3_ROOTED, BattleScript_PrintMonIsRooted
-	accuracycheck BattleScript_ButItFailed, NO_ACC_CALC_CHECK_LOCK_ON
-	accuracycheck BattleScript_MoveMissedPause, ACC_CURR_MOVE
+	accuracycheck BattleScript_ButItFailed, NO_ACC_CALC
 	jumpifbattletype BATTLE_TYPE_ARENA, BattleScript_ButItFailed
 	forcerandomswitch BattleScript_ButItFailed
 
@@ -1288,7 +1288,7 @@ BattleScript_EffectLockOn::
 	attackstring
 	ppreduce
 	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_ButItFailed
-	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
+	accuracycheck BattleScript_ButItFailed, NO_ACC_CALC
 	setalwayshitflag
 	attackanimation
 	waitanimation
@@ -1715,7 +1715,30 @@ BattleScript_EffectBatonPass::
 
 BattleScript_EffectRapidSpin::
 	setmoveeffect MOVE_EFFECT_RAPIDSPIN | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN
-	goto BattleScript_EffectHit
+	attackcanceler
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	attackstring
+	ppreduce
+	critcalc
+	damagecalc
+	typecalc
+	adjustnormaldamage
+	attackanimation
+	waitanimation
+	effectivenesssound
+	hitanimation BS_TARGET
+	waitstate
+	healthbarupdate BS_TARGET
+	datahpupdate BS_TARGET
+	critmessage
+	waitmessage B_WAIT_TIME_LONG
+	resultmessage
+	waitmessage B_WAIT_TIME_LONG
+	seteffectwithchance
+	setmoveeffect MOVE_EFFECT_SPD_PLUS_1 | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN
+	seteffectwithchance
+	tryfaintmon BS_TARGET
+	goto BattleScript_MoveEnd
 
 BattleScript_EffectSonicboom::
 	attackcanceler
@@ -2567,6 +2590,33 @@ BattleScript_EffectSecretPower::
 BattleScript_EffectDoubleEdge::
 	setmoveeffect MOVE_EFFECT_RECOIL_33 | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN
 	goto BattleScript_EffectHit
+
+BattleScript_EffectVoltTackle::
+	setmoveeffect MOVE_EFFECT_PARALYSIS
+	attackcanceler
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	attackstring
+	ppreduce
+	critcalc
+	damagecalc
+	typecalc
+	adjustnormaldamage
+	attackanimation
+	waitanimation
+	effectivenesssound
+	hitanimation BS_TARGET
+	waitstate
+	healthbarupdate BS_TARGET
+	datahpupdate BS_TARGET
+	critmessage
+	waitmessage B_WAIT_TIME_LONG
+	resultmessage
+	waitmessage B_WAIT_TIME_LONG
+	seteffectwithchance
+	setmoveeffect MOVE_EFFECT_RECOIL_33 | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN
+	seteffectwithchance
+	tryfaintmon BS_TARGET
+	goto BattleScript_MoveEnd
 
 BattleScript_EffectTeeterDance::
 	attackcanceler
