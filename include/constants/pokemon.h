@@ -216,6 +216,11 @@
 #define FLAG_MIRROR_MOVE_AFFECTED   (1 << 4)
 #define FLAG_KINGS_ROCK_AFFECTED    (1 << 5)
 
+// Move category constants
+#define CATEGORY_PHYSICAL 0
+#define CATEGORY_SPECIAL  1
+#define CATEGORY_OTHER    2
+
 // Growth rates
 #define GROWTH_MEDIUM_FAST  0
 #define GROWTH_ERRATIC      1
